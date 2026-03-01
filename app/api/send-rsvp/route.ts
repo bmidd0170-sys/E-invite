@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     // Email 1: Notification to organizer (hardcoded email)
     const organizerEmail = {
       from: process.env.GMAIL_USER,
-      to: 'Braydenmiddlebrooks@gmail.com',
+      to: 'bkhouse275@gmail.com', // Replace with your email
       subject: 'New RSVP Confirmation',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
