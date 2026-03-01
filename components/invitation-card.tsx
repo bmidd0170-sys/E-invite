@@ -77,16 +77,16 @@ export function InvitationCard() {
 
         {/* Venue */}
         <p
-          className="text-xs sm:text-sm md:text-base mt-2 md:mt-3 tracking-wide"
-          style={{ color: "#d4d4d4" }}
+          className="text-sm sm:text-base md:text-lg mt-2 md:mt-3 tracking-wide font-bold"
+          style={{ color: "#ef4444" }}
         >
           {'"Kimpton Resort & Spa" Roatan, Honduras'}
         </p>
 
         {/* Trip Dates */}
         <p
-          className="text-xs sm:text-sm md:text-base mt-1 tracking-wide font-semibold"
-          style={{ color: "#d4d4d4" }}
+          className="text-sm sm:text-base md:text-lg mt-1 tracking-wide font-bold"
+          style={{ color: "#ef4444" }}
         >
           June 12-15, 2026
         </p>

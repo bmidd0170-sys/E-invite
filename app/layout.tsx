@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Playfair_Display, Cormorant_Garamond } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { FloatingRsvpButton } from '@/components/floating-rsvp-button'
 import './globals.css'
 
 const playfair = Playfair_Display({
@@ -50,6 +51,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${playfair.variable} ${cormorant.variable} font-sans antialiased`}>
         {children}
+        <FloatingRsvpButton />
         <Analytics />
       </body>
     </html>
