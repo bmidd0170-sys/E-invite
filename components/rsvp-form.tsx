@@ -34,10 +34,10 @@ export function RSVPForm({ onSuccess }: RSVPFormProps) {
         setEmail('');
         setName('');
         localStorage.setItem('rsvp_sent', 'true');
-        
+
         // Dispatch custom event to notify other components
         window.dispatchEvent(new CustomEvent('rsvp_success'));
-        
+
         // Callback after 3 seconds
         setTimeout(() => {
           setStatus('idle');
@@ -83,7 +83,7 @@ export function RSVPForm({ onSuccess }: RSVPFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <h3 className="font-serif text-lg font-semibold text-foreground">RSVP for Event</h3>
-      
+
       <div>
         <label className="block text-sm font-serif font-medium text-muted-foreground mb-2">
           Your Name
@@ -115,7 +115,7 @@ export function RSVPForm({ onSuccess }: RSVPFormProps) {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-secondary/50 border border-border hover:border-[#C41E3A] disabled:opacity-50 disabled:cursor-not-allowed font-serif font-semibold py-2 rounded-md transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[#C41E3A]/30 text-[#C41E3A]"
+        className="w-full bg-[#C41E3A] border border-[#C41E3A] hover:bg-[#A01830] disabled:opacity-50 disabled:cursor-not-allowed font-serif font-semibold py-2 rounded-md transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[#C41E3A]/30 text-white"
       >
         {isLoading ? 'Sending...' : 'Confirm RSVP'}
       </button>

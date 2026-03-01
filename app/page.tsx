@@ -34,7 +34,7 @@ export default function Home() {
               </p>
               <button
                 onClick={() => setShowRsvpModal(true)}
-                className="inline-flex items-center gap-2 bg-secondary/50 border border-border hover:border-[#C41E3A] font-serif font-semibold px-8 py-3 rounded-md text-[#C41E3A] transition-all duration-300 hover:shadow-lg hover:shadow-[#C41E3A]/30"
+                className="inline-flex items-center gap-2 bg-[#C41E3A] border border-[#C41E3A] hover:bg-[#A01830] font-serif font-semibold px-8 py-3 rounded-md text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#C41E3A]/30"
               >
                 RSVP Now
               </button>
