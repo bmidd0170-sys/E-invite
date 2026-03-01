@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Mail, CheckCircle, AlertCircle, X } from 'lucide-react';
 
 export function FloatingRsvpButton() {
@@ -10,6 +10,14 @@ export function FloatingRsvpButton() {
   const [name, setName] = useState('');
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+  const [rsvpSent, setRsvpSent] = useState(false);
+
+  useEffect(() => {
+    const rsvpStatus = localStorage.getItem('rsvp_sent');
+    if (rsvpStatus === 'true') {
+      setRsvpSent(true);
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,11 +38,13 @@ export function FloatingRsvpButton() {
         setMessage('Thank you for your RSVP!');
         setEmail('');
         setName('');
+        localStorage.setItem('rsvp_sent', 'true');
         
-        // Auto-close after 3 seconds
+        // Auto-close after 3 seconds and hide button
         setTimeout(() => {
           setIsOpen(false);
           setStatus('idle');
+          setRsvpSent(true);
         }, 3000);
       } else {
         setStatus('error');
@@ -48,6 +58,10 @@ export function FloatingRsvpButton() {
       setIsLoading(false);
     }
   };
+
+  if (rsvpSent) {
+    return null;
+  }
 
   return (
     <div className="fixed top-4 left-4 z-50">
