@@ -40,10 +40,6 @@ export function VideoSection() {
                 className="absolute inset-0 w-full h-full"
               />
             </div>
-            <div className="flex items-center justify-center gap-2">
-              <Play className="w-4 h-4" style={{ color: "#C41E3A" }} />
-              <p className="text-muted-foreground text-sm font-medium">{video.label}</p>
-            </div>
           </div>
         ))}
       </div>
