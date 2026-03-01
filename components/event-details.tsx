@@ -13,6 +13,9 @@ export function EventBanner() {
             <p className="text-muted-foreground text-sm md:text-base">
               Please confirm your resort booking directly with the hotel.
             </p>
+            <p className="text-muted-foreground text-sm">
+              1 Night deposit required 
+            </p>
           </div>
           <div className="flex flex-col items-center gap-2 text-center">
             <p className="text-base md:text-lg font-semibold" style={{ color: "#C41E3A" }}>
@@ -28,7 +31,7 @@ export function EventBanner() {
               Reserve
             </a>
             <p className="text-xs text-muted-foreground">
-              Click the button for reservations
+              April 10th deadline for discont
             </p>
           </div>
         </div>
