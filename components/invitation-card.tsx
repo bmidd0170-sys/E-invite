@@ -5,12 +5,13 @@ import { SparkleEffect } from "./sparkle-effect"
 
 export function InvitationCard() {
   return (
-    <div className="relative w-full max-w-[520px] mx-auto aspect-[1463/2048] overflow-hidden rounded-lg shadow-2xl shadow-primary/20 bg-black">
+    <div className="relative mx-auto overflow-hidden rounded-lg shadow-2xl shadow-red-900/40 bg-black">
       <Image
-        src="/1596298992813115960.png"
+        src="/1849042460367694260.png"
         alt="Invitation card"
-        fill
-        className="object-contain"
+        width={1463}
+        height={2048}
+        className="w-auto h-auto"
         priority
       />
       <div className="absolute inset-0 pointer-events-none z-10">

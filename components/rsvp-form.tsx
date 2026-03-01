@@ -115,7 +115,7 @@ export function RSVPForm({ onSuccess }: RSVPFormProps) {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-gradient-to-r from-[#C41E3A] to-[#8B0000] hover:from-[#8B0000] hover:to-[#C41E3A] disabled:opacity-50 disabled:cursor-not-allowed text-white font-serif font-semibold py-2 rounded-md transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[#C41E3A]/20"
+        className="w-full bg-secondary/50 border border-border hover:border-[#C41E3A] disabled:opacity-50 disabled:cursor-not-allowed font-serif font-semibold py-2 rounded-md transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[#C41E3A]/30 text-[#C41E3A]"
       >
         {isLoading ? 'Sending...' : 'Confirm RSVP'}
       </button>

@@ -18,7 +18,7 @@ export function FloatingRsvpButton() {
       {/* Main Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 bg-gradient-to-br from-[#C41E3A] to-[#8B0000] hover:from-[#8B0000] hover:to-[#C41E3A] text-white rounded-full px-6 py-3 font-serif font-semibold shadow-lg shadow-[#C41E3A]/30 transition-all duration-300 hover:shadow-xl hover:shadow-[#C41E3A]/50"
+        className="flex items-center gap-2 bg-secondary/50 border border-border hover:border-[#C41E3A] text-[#C41E3A] rounded-full px-6 py-3 font-serif font-semibold shadow-lg shadow-[#C41E3A]/20 transition-all duration-300 hover:shadow-xl hover:shadow-[#C41E3A]/40"
         aria-label="RSVP"
       >
         <Mail size={20} />
