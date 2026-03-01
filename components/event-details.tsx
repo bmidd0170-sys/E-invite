@@ -22,7 +22,7 @@ export function EventBanner() {
               href="https://www.ihg.com/kimptonhotels/hotels/us/en/find-hotels/select-roomrate?fromRedirect=true&qSrt=sBR&qIta=99801505&icdv=99801505&qDest=West%20Bay,%20Bay%20Islands,%20Honduras&qErm=false&qSlH=RTBGR&qRms=1&qAdlt=1&qChld=0&qCiD=12&qCiMy=052026&qCoD=16&qCoMy=052026&qGrpCd=MP1&qAAR=&qRtP=6CBARC&setPMCookies=true&qSHBrC=KI&qpMbw=0&qpMn=1&srb_u=1&qRmFltr="
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-secondary/50 border border-border hover:border-[#C41E3A] font-serif font-semibold px-5 py-2.5 rounded-md text-[#C41E3A] transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[#C41E3A]/30"
+              className="inline-flex items-center gap-2 bg-white border border-white hover:border-[#C41E3A] font-serif font-semibold px-5 py-2.5 rounded-md text-[#C41E3A] transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-[#C41E3A]/30"
             >
               <Building2 className="w-4 h-4" />
               Reserve
@@ -76,7 +76,8 @@ export function EventDetails() {
     {
       time: "Day 3 - June 14",
       title: "Birthday Celebration",
-      description: "Dinner 7pm at Kimpton Resort."
+      description: "Dinner 7pm at Kimpton Resort.",
+      colorTheme: "Red / Black (Not Mandatory)"
     },
     {
       time: "Day 4 - June 15",
@@ -116,6 +117,11 @@ export function EventDetails() {
                   <p className="text-muted-foreground text-sm md:text-base">
                     {item.description}
                   </p>
+                  {item.colorTheme && (
+                    <p className="text-muted-foreground text-sm md:text-base mt-2">
+                      <span className="font-semibold">Color Theme:</span> {item.colorTheme}
+                    </p>
+                  )}
                 </div>
               </div>
               {index < itineraryItems.length - 1 && (

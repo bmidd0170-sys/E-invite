@@ -34,7 +34,7 @@ export default function Home() {
               </p>
               <button
                 onClick={() => setShowRsvpModal(true)}
-                className="inline-flex items-center gap-2 bg-secondary/50 border border-border hover:border-[#C41E3A] font-serif font-semibold px-8 py-3 rounded-md text-[#C41E3A] transition-all duration-300 hover:shadow-lg hover:shadow-[#C41E3A]/30"
+                className="inline-flex items-center gap-2 bg-white border border-white hover:border-[#C41E3A] font-serif font-semibold px-8 py-3 rounded-md text-[#C41E3A] transition-all duration-300 hover:shadow-lg hover:shadow-[#C41E3A]/30"
               >
                 RSVP Now
               </button>
@@ -80,7 +80,7 @@ export default function Home() {
           <div className="flex flex-col items-center gap-3 text-center">
             <Heart className="w-5 h-5" style={{ color: "#C41E3A" }} fill="#C41E3A" />
             <p className="font-serif text-lg md:text-xl text-foreground" style={{ fontStyle: "italic", color: "#C41E3A" }}>
-              {"Let's celebrate Patricia in style!"}
+              {"Celebrate Patricia!"}
             </p>
             <p className="text-muted-foreground text-xs md:text-sm">
               {"If you have any questions, please don't hesitate to reach out."}
