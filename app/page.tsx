@@ -1,22 +1,18 @@
 "use client"
 
 import Image from "next/image"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { InvitationCard } from "@/components/invitation-card"
 import { EventBanner, EventDetails } from "@/components/event-details"
 import { VideoSection } from "@/components/video-section"
 import { CountdownTimer } from "@/components/countdown-timer"
-import { Heart } from "lucide-react"
+import { RSVPForm } from "@/components/rsvp-form"
+import { useRsvpState } from "@/hooks/use-rsvp-state"
+import { Heart, X } from "lucide-react"
 
 export default function Home() {
-  const [rsvpSent, setRsvpSent] = useState(false)
-
-  useEffect(() => {
-    const rsvpStatus = localStorage.getItem('rsvp_sent')
-    if (rsvpStatus === 'true') {
-      setRsvpSent(true)
-    }
-  }, [])
+  const [showRsvpModal, setShowRsvpModal] = useState(false)
+  const rsvpSent = useRsvpState()
   return (
     <main className="min-h-screen bg-background">
       {/* Top decorative line */}
@@ -36,13 +32,33 @@ export default function Home() {
               <p className="text-muted-foreground text-sm md:text-base mb-6">
                 Please RSVP to confirm your attendance at Patricia's 60th Birthday Celebration
               </p>
-              <a
-                href="#rsvp"
+              <button
+                onClick={() => setShowRsvpModal(true)}
                 className="inline-flex items-center gap-2 font-serif font-semibold px-8 py-3 rounded-md text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#C41E3A]/30"
                 style={{ background: "linear-gradient(to right, #C41E3A, #8B0000)" }}
               >
                 RSVP Now
-              </a>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* RSVP Modal */}
+        {showRsvpModal && (
+          <div className="fixed inset-0 bg-black/50 z-40 flex items-center justify-center p-4">
+            <div className="bg-[#111111] rounded-lg shadow-2xl shadow-[#C41E3A]/30 p-6 md:p-8 border border-[#2a2a2a] w-full max-w-md relative">
+              <button
+                onClick={() => setShowRsvpModal(false)}
+                className="absolute top-3 right-3 text-muted-foreground hover:text-foreground transition"
+                aria-label="Close"
+              >
+                <X size={20} />
+              </button>
+              <RSVPForm
+                onSuccess={() => {
+                  setShowRsvpModal(false)
+                }}
+              />
             </div>
           </div>
         )}

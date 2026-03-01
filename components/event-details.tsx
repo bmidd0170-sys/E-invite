@@ -14,9 +14,9 @@ export function EventBanner() {
               Please confirm your resort booking directly with the hotel.
             </p>
           </div>
-          <div className="flex flex-col items-center md:items-end gap-2">
+          <div className="flex flex-col items-center gap-2 text-center">
             <p className="text-base md:text-lg font-semibold" style={{ color: "#C41E3A" }}>
-              Kimpton Reservation
+              Kimpton Reservations
             </p>
             <a
               href="https://www.ihg.com/kimptonhotels/hotels/us/en/find-hotels/select-roomrate?fromRedirect=true&qSrt=sBR&qIta=99801505&icdv=99801505&qDest=West%20Bay,%20Bay%20Islands,%20Honduras&qErm=false&qSlH=RTBGR&qRms=1&qAdlt=1&qChld=0&qCiD=12&qCiMy=052026&qCoD=16&qCoMy=052026&qGrpCd=MP1&qAAR=&qRtP=6CBARC&setPMCookies=true&qSHBrC=KI&qpMbw=0&qpMn=1&srb_u=1&qRmFltr="
@@ -26,7 +26,7 @@ export function EventBanner() {
               style={{ background: "linear-gradient(to right, #C41E3A, #8B0000)" }}
             >
               <Building2 className="w-4 h-4" />
-              Reserves
+              Reserve
             </a>
             <p className="text-xs text-muted-foreground">
               Click the button for reservations
@@ -72,7 +72,7 @@ export function EventDetails() {
     {
       time: "Day 2 - June 13",
       title: "Brunch & Beach Activities",
-      description: "Join us for brunch at (10am - 1pm). Afterwords beach activities."
+      description: "Join us for brunch (10am - 1pm). Afterwords beach activities."
     },
     {
       time: "Day 3 - June 14",
