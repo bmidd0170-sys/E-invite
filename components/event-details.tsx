@@ -31,7 +31,7 @@ export function EventBanner() {
               Reserve
             </a>
             <p className="text-xs text-muted-foreground">
-              April 10th deadline for discont
+              Reserve by April 10th for discount
             </p>
           </div>
         </div>
