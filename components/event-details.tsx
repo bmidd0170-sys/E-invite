@@ -1,10 +1,35 @@
 "use client"
 
-import { Sun, Palmtree } from "lucide-react"
+import { Sun, Palmtree, Building2 } from "lucide-react"
 
 export function EventBanner() {
   return (
     <section className="w-full max-w-[800px] mx-auto mt-12 md:mt-16">
+      {/* Resort RSVP Card */}
+      <div className="bg-secondary/50 border border-border rounded-lg p-6 md:p-8 mb-8 md:mb-10">
+        <div className="flex items-start md:items-center justify-between gap-4 flex-col md:flex-row">
+          <div>
+            <p className="text-base md:text-lg font-semibold mb-1" style={{ color: "#C41E3A" }}>
+              Resort RSVP
+            </p>
+            <h3 className="font-serif text-xl md:text-2xl text-foreground mb-1">Kimpton Resort & Spa</h3>
+            <p className="text-muted-foreground text-sm md:text-base">
+              Please confirm your resort booking directly with the hotel.
+            </p>
+          </div>
+          <a
+            href="https://www.ihg.com/kimptonhotels/hotels/us/en/find-hotels/select-roomrate?fromRedirect=true&qSrt=sBR&qIta=99801505&icdv=99801505&qDest=West%20Bay,%20Bay%20Islands,%20Honduras&qErm=false&qSlH=RTBGR&qRms=1&qAdlt=1&qChld=0&qCiD=12&qCiMy=052026&qCoD=16&qCoMy=052026&qGrpCd=MP1&qAAR=&qRtP=6CBARC&setPMCookies=true&qSHBrC=KI&qpMbw=0&qpMn=1&srb_u=1&qRmFltr="
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 font-serif font-semibold px-5 py-2.5 rounded-md text-white transition-all duration-300"
+            style={{ background: "linear-gradient(to right, #C41E3A, #8B0000)" }}
+          >
+            <Building2 className="w-4 h-4" />
+            RSVP Resort
+          </a>
+        </div>
+      </div>
+
       {/* Fun in the Sun Banner */}
       <div className="relative overflow-hidden rounded-lg mb-10">
         <div
@@ -42,12 +67,12 @@ export function EventDetails() {
     {
       time: "Day 2 - June 13",
       title: "Brunch & Beach Activities",
-      description: "Join us at 10am-1pm for brunch and beach activities."
+      description: "Join us at 10am for brunch. Afterwords at 1pm beach activities."
     },
     {
       time: "Day 3 - June 14",
-      title: "After Birthday Celebration",
-      description: "Dinner at 7pm at Kimpton Resort."
+      title: "Birthday Celebration",
+      description: "Dinner 7pm at Kimpton Resort."
     },
     {
       time: "Day 4 - June 15",

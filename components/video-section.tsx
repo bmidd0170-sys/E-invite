@@ -36,7 +36,7 @@ export function VideoSection() {
       <div className="flex flex-col gap-6">
         {/* Top two videos side by side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {videos.slice(0, 2).map((video) => (
+          {[videos[2], videos[1]].map((video) => (
             <div key={video.embedId} className="flex flex-col gap-3">
               <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-border bg-secondary">
                 <iframe
@@ -56,8 +56,8 @@ export function VideoSection() {
           <div className="w-full md:w-1/2 flex flex-col gap-3">
             <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-border bg-secondary">
               <iframe
-                src={`https://www.youtube.com/embed/${videos[2].embedId}?rel=0`}
-                title={videos[2].label}
+                src={`https://www.youtube.com/embed/${videos[0].embedId}?rel=0`}
+                title={videos[0].label}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="absolute inset-0 w-full h-full"
