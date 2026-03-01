@@ -18,8 +18,8 @@ export default function Home() {
         <div className="relative w-full max-w-[800px] mx-auto">
           <InvitationCard />
           
-          {/* Image on right side outside card */}
-          <div className="hidden md:block absolute -right-56 top-1/2 transform -translate-y-1/2 w-48 h-64 border-4 border-[#C41E3A]" style={{ boxShadow: "0 0 40px 10px rgba(196, 30, 58, 0.2)" }}>
+          {/* Image on left side outside card */}
+          <div className="hidden md:block absolute -left-80 top-1/2 transform -translate-y-1/2 w-72 h-96 border-4 border-[#C41E3A]" style={{ boxShadow: "0 0 40px 10px rgba(196, 30, 58, 0.2)" }}>
             <Image
               src="/4234121429247846438.png"
               alt="Decorative image"
@@ -29,11 +29,11 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Countdown */}
-        <CountdownTimer />
-
         {/* Event Banner */}
         <EventBanner />
+
+        {/* Countdown */}
+        <CountdownTimer />
 
         {/* Video Section */}
         <VideoSection />

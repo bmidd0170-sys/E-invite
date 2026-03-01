@@ -41,18 +41,18 @@ export function EventDetails() {
     },
     {
       time: "Day 2 - June 13",
-      title: "Beach Activities",
-      description: "Enjoy water sports, snorkeling, and relaxation on the beautiful beach."
+      title: "Brunch & Beach Activities",
+      description: "Join us for brunch and beach activities from 10am-1pm."
     },
     {
       time: "Day 3 - June 14",
-      title: "Birthday Celebration",
-      description: "Special dinner party and celebration honoring Patricia's 60th birthday."
+      title: "After Birthday Celebration",
+      description: "Dinner at 7pm at Kimpton Resort."
     },
     {
       time: "Day 4 - June 15",
       title: "Departure",
-      description: "Final morning breakfast and checkout. Safe travels home!"
+      description: "For those who are leaving."
     }
   ]
 

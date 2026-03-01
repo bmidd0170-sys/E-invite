@@ -4,6 +4,11 @@ import { Music, Play } from "lucide-react"
 
 const videos = [
   {
+    url: "https://youtu.be/C1QujVeofUo",
+    embedId: "C1QujVeofUo",
+    label: "Ready to Party",
+  },
+  {
     url: "https://youtu.be/3siLBRsoxq4",
     embedId: "3siLBRsoxq4",
     label: "Get in the Party Mood",
@@ -28,20 +33,38 @@ export function VideoSection() {
         <div className="h-px flex-1 max-w-[80px]" style={{ backgroundColor: "#C41E3A" }} />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {videos.map((video) => (
-          <div key={video.embedId} className="flex flex-col gap-3">
+      <div className="flex flex-col gap-6">
+        {/* Top centered video */}
+        <div className="flex justify-center">
+          <div className="w-full md:w-1/2 flex flex-col gap-3">
             <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-border bg-secondary">
               <iframe
-                src={`https://www.youtube.com/embed/${video.embedId}?rel=0`}
-                title={video.label}
+                src={`https://www.youtube.com/embed/${videos[0].embedId}?rel=0`}
+                title={videos[0].label}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="absolute inset-0 w-full h-full"
               />
             </div>
           </div>
-        ))}
+        </div>
+
+        {/* Bottom two videos side by side */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {videos.slice(1).map((video) => (
+            <div key={video.embedId} className="flex flex-col gap-3">
+              <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-border bg-secondary">
+                <iframe
+                  src={`https://www.youtube.com/embed/${video.embedId}?rel=0`}
+                  title={video.label}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 w-full h-full"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )

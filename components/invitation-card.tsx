@@ -77,7 +77,7 @@ export function InvitationCard() {
 
         {/* Venue */}
         <p
-          className="text-sm sm:text-base md:text-lg mt-2 md:mt-3 tracking-wide font-bold"
+          className="font-serif text-sm sm:text-base md:text-lg mt-2 md:mt-3 tracking-wide font-bold"
           style={{ color: "#ef4444" }}
         >
           {'"Kimpton Resort & Spa" Roatan, Honduras'}
@@ -85,7 +85,7 @@ export function InvitationCard() {
 
         {/* Trip Dates */}
         <p
-          className="text-sm sm:text-base md:text-lg mt-1 tracking-wide font-bold"
+          className="font-serif text-sm sm:text-base md:text-lg mt-1 tracking-wide font-bold"
           style={{ color: "#ef4444" }}
         >
           June 12-15, 2026

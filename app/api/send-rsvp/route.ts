@@ -47,13 +47,18 @@ export async function POST(request: NextRequest) {
     const guestEmail = {
       from: process.env.GMAIL_USER,
       to: email,
-      subject: 'RSVP Confirmation',
+      subject: 'Patricia\'s Birthday Celebration Kimpton Resort',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #C41E3A;">Thank You for Your RSVP!</h2>
           <p style="color: #666; line-height: 1.6;">
             We've received your RSVP confirmation, ${name}. 
             We look forward to seeing you at our event!
+          </p>
+          <p style="color: #333; line-height: 1.6; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 4px solid #C41E3A;">
+            <strong>Important Reminder:</strong> You need to RSVP to the resort directly. 
+            <br><br>
+            <a href="https://www.ihg.com/kimptonhotels/hotels/us/en/find-hotels/select-roomrate?fromRedirect=true&qSrt=sBR&qIta=99801505&icdv=99801505&qDest=West%20Bay,%20Bay%20Islands,%20Honduras&qErm=false&qSlH=RTBGR&qRms=1&qAdlt=1&qChld=0&qCiD=12&qCiMy=052026&qCoD=16&qCoMy=052026&qGrpCd=MP1&qAAR=&qRtP=6CBARC&setPMCookies=true&qSHBrC=KI&qpMbw=0&qpMn=1&srb_u=1&qRmFltr=" style="color: #C41E3A; text-decoration: none; font-weight: bold;">Click here to book your room at Kimpton Resort</a>
           </p>
           <p style="color: #999; font-size: 12px; margin-top: 20px;">
             This is an automated email. Please do not reply to this message.
