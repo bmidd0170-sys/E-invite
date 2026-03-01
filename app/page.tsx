@@ -14,19 +14,9 @@ export default function Home() {
       <div className="w-full h-1" style={{ background: "linear-gradient(to right, #0a0a0a, #C41E3A, #8B0000, #C41E3A, #0a0a0a)" }} />
 
       <div className="px-4 md:px-6 py-10 md:py-16">
-        {/* Invitation Card with outside image */}
+        {/* Invitation Card */}
         <div className="relative w-full max-w-[800px] mx-auto">
           <InvitationCard />
-          
-          {/* Image on left side outside card */}
-          <div className="hidden md:block absolute -left-80 top-1/2 transform -translate-y-1/2 w-72 h-96 border-4 border-[#C41E3A]" style={{ boxShadow: "0 0 40px 10px rgba(196, 30, 58, 0.2)" }}>
-            <Image
-              src="/4234121429247846438.png"
-              alt="Decorative image"
-              fill
-              className="object-cover"
-            />
-          </div>
         </div>
 
         {/* Event Banner */}

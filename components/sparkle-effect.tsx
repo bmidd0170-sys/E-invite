@@ -2,7 +2,13 @@
 
 import { useEffect, useRef } from "react"
 
-export function SparkleEffect() {
+type SparkleMode = "full" | "edges"
+
+interface SparkleEffectProps {
+  mode?: SparkleMode
+}
+
+export function SparkleEffect({ mode = "full" }: SparkleEffectProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -32,10 +38,34 @@ export function SparkleEffect() {
     const width = canvas.offsetWidth
     const height = canvas.offsetHeight
 
-    for (let i = 0; i < 120; i++) {
+    const sparkleCount = mode === "edges" ? 220 : 160
+
+    for (let i = 0; i < sparkleCount; i++) {
+      let x = Math.random() * width
+      let y = Math.random() * height
+
+      if (mode === "edges") {
+        const edgeBand = Math.min(width, height) * 0.18
+        const side = Math.floor(Math.random() * 4)
+
+        if (side === 0) {
+          x = Math.random() * width
+          y = Math.random() * edgeBand
+        } else if (side === 1) {
+          x = Math.random() * width
+          y = height - Math.random() * edgeBand
+        } else if (side === 2) {
+          x = Math.random() * edgeBand
+          y = Math.random() * height
+        } else {
+          x = width - Math.random() * edgeBand
+          y = Math.random() * height
+        }
+      }
+
       sparkles.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
+        x,
+        y,
         size: Math.random() * 2 + 0.5,
         opacity: Math.random(),
         speed: Math.random() * 0.02 + 0.005,
@@ -54,13 +84,13 @@ export function SparkleEffect() {
 
         ctx.beginPath()
         ctx.arc(sparkle.x, sparkle.y, sparkle.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255, 255, 255, ${sparkle.opacity * 0.8})`
+        ctx.fillStyle = `rgba(255, 255, 255, ${sparkle.opacity * 0.95})`
         ctx.fill()
 
         // Add a tiny glow
         ctx.beginPath()
-        ctx.arc(sparkle.x, sparkle.y, sparkle.size * 2, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(255, 255, 255, ${sparkle.opacity * 0.15})`
+        ctx.arc(sparkle.x, sparkle.y, sparkle.size * 2.4, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(255, 255, 255, ${sparkle.opacity * 0.24})`
         ctx.fill()
       })
 
@@ -78,7 +108,7 @@ export function SparkleEffect() {
       cancelAnimationFrame(animationId)
       window.removeEventListener("resize", handleResize)
     }
-  }, [])
+  }, [mode])
 
   return (
     <canvas

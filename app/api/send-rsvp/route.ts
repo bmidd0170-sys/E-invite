@@ -52,8 +52,7 @@ export async function POST(request: NextRequest) {
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #C41E3A;">Thank You for Your RSVP!</h2>
           <p style="color: #666; line-height: 1.6;">
-            We've received your RSVP confirmation, ${name}. 
-            We look forward to seeing you at our event!
+            Thank you for confirming your attendance! We’re so excited to celebrate Patricia turning 60 with you on June 14, 2026, at the beautiful Kimpton Resort &amp; Spa in Roatán, Honduras. It truly means so much to have you there to share in this special milestone.
           </p>
           <p style="color: #333; line-height: 1.6; margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-left: 4px solid #C41E3A;">
             <strong>Important Reminder:</strong> You need to RSVP to the resort directly. 

@@ -4,9 +4,9 @@ import { Music, Play } from "lucide-react"
 
 const videos = [
   {
-    url: "https://youtu.be/C1QujVeofUo",
-    embedId: "C1QujVeofUo",
-    label: "Ready to Party",
+    url: "https://youtu.be/Uh58gKZH85M",
+    embedId: "Uh58gKZH85M",
+    label: "Feel the Vibes",
   },
   {
     url: "https://youtu.be/3siLBRsoxq4",
@@ -14,9 +14,9 @@ const videos = [
     label: "Get in the Party Mood",
   },
   {
-    url: "https://youtu.be/Uh58gKZH85M",
-    embedId: "Uh58gKZH85M",
-    label: "Feel the Vibes",
+    url: "https://youtu.be/C1QujVeofUo",
+    embedId: "C1QujVeofUo",
+    label: "Ready to Party",
   },
 ]
 
@@ -34,24 +34,9 @@ export function VideoSection() {
       </div>
 
       <div className="flex flex-col gap-6">
-        {/* Top centered video */}
-        <div className="flex justify-center">
-          <div className="w-full md:w-1/2 flex flex-col gap-3">
-            <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-border bg-secondary">
-              <iframe
-                src={`https://www.youtube.com/embed/${videos[0].embedId}?rel=0`}
-                title={videos[0].label}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="absolute inset-0 w-full h-full"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom two videos side by side */}
+        {/* Top two videos side by side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {videos.slice(1).map((video) => (
+          {videos.slice(0, 2).map((video) => (
             <div key={video.embedId} className="flex flex-col gap-3">
               <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-border bg-secondary">
                 <iframe
@@ -64,6 +49,21 @@ export function VideoSection() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Bottom centered video */}
+        <div className="flex justify-center">
+          <div className="w-full md:w-1/2 flex flex-col gap-3">
+            <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-border bg-secondary">
+              <iframe
+                src={`https://www.youtube.com/embed/${videos[2].embedId}?rel=0`}
+                title={videos[2].label}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>

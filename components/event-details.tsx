@@ -42,7 +42,7 @@ export function EventDetails() {
     {
       time: "Day 2 - June 13",
       title: "Brunch & Beach Activities",
-      description: "Join us for brunch and beach activities from 10am-1pm."
+      description: "Join us at 10am-1pm for brunch and beach activities."
     },
     {
       time: "Day 3 - June 14",
