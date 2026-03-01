@@ -1,8 +1,8 @@
 "use client"
 
-import { MapPin, CalendarDays, Sun, Palmtree, Music } from "lucide-react"
+import { Sun, Palmtree } from "lucide-react"
 
-export function EventDetails() {
+export function EventBanner() {
   return (
     <section className="w-full max-w-[800px] mx-auto mt-12 md:mt-16">
       {/* Fun in the Sun Banner */}
@@ -28,45 +28,72 @@ export function EventDetails() {
           </p>
         </div>
       </div>
+    </section>
+  )
+}
 
-      {/* Details Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Location Card */}
-        <div className="bg-secondary/50 border border-border rounded-lg p-6 md:p-8 flex flex-col items-center text-center">
-          <div
-            className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
-            style={{ backgroundColor: "rgba(196, 30, 58, 0.15)" }}
-          >
-            <MapPin className="w-6 h-6" style={{ color: "#C41E3A" }} />
-          </div>
-          <h3 className="font-serif text-xl md:text-2xl text-foreground mb-2">
-            Venue
-          </h3>
-          <p className="text-muted-foreground text-sm md:text-base">
-            Kimpton Resort & Spa
-          </p>
-          <p className="text-muted-foreground text-sm md:text-base">
-            Roatan, Honduras
-          </p>
-        </div>
+export function EventDetails() {
+  const itineraryItems = [
+    {
+      time: "Day 1 - June 12",
+      title: "Arrival & Check-in",
+      description: "Welcome to Roatan! Check-in at Kimpton Resort & Spa and settle in."
+    },
+    {
+      time: "Day 2 - June 13",
+      title: "Beach Activities",
+      description: "Enjoy water sports, snorkeling, and relaxation on the beautiful beach."
+    },
+    {
+      time: "Day 3 - June 14",
+      title: "Birthday Celebration",
+      description: "Special dinner party and celebration honoring Patricia's 60th birthday."
+    },
+    {
+      time: "Day 4 - June 15",
+      title: "Departure",
+      description: "Final morning breakfast and checkout. Safe travels home!"
+    }
+  ]
 
-        {/* Dates Card */}
-        <div className="bg-secondary/50 border border-border rounded-lg p-6 md:p-8 flex flex-col items-center text-center">
-          <div
-            className="w-12 h-12 rounded-full flex items-center justify-center mb-4"
-            style={{ backgroundColor: "rgba(196, 30, 58, 0.15)" }}
-          >
-            <CalendarDays className="w-6 h-6" style={{ color: "#C41E3A" }} />
-          </div>
-          <h3 className="font-serif text-xl md:text-2xl text-foreground mb-2">
-            Dates
-          </h3>
-          <p className="text-muted-foreground text-sm md:text-base">
-            {"Birthday: June 14, 2026"}
-          </p>
-          <p className="text-muted-foreground text-sm md:text-base">
-            {"Trip: June 12 - 15, 2026"}
-          </p>
+  return (
+    <section className="w-full max-w-[800px] mx-auto mt-12 md:mt-16">
+      {/* Separator line */}
+      <div className="h-px w-full mb-8" style={{ background: "linear-gradient(to right, transparent, #C41E3A, transparent)" }} />
+      
+      {/* Itinerary Container */}
+      <div className="bg-secondary/50 border border-border rounded-lg p-6 md:p-8">
+        <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-8 text-center">
+          Itinerary
+        </h2>
+        
+        <div className="space-y-6">
+          {itineraryItems.map((item, index) => (
+            <div key={index}>
+              <div className="flex items-start gap-4">
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 mt-1 font-serif font-semibold"
+                  style={{ backgroundColor: "rgba(196, 30, 58, 0.15)", color: "#C41E3A" }}
+                >
+                  {index + 1}
+                </div>
+                <div>
+                  <p className="text-xs md:text-sm font-semibold" style={{ color: "#C41E3A" }}>
+                    {item.time}
+                  </p>
+                  <h3 className="font-serif text-lg md:text-xl text-foreground mb-1">
+                    {item.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm md:text-base">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+              {index < itineraryItems.length - 1 && (
+                <div className="h-px w-full mt-6" style={{ background: "linear-gradient(to right, transparent, rgba(196, 30, 58, 0.3), transparent)" }} />
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </section>
