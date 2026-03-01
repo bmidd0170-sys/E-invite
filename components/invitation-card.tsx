@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import { SparkleEffect } from "./sparkle-effect"
 
 export function InvitationCard() {
   return (
@@ -13,6 +14,10 @@ export function InvitationCard() {
         className="w-full h-auto"
         priority
       />
+      {/* Sparkle/glitter overlay on top of the card image */}
+      <div className="absolute inset-0 pointer-events-none">
+        <SparkleEffect />
+      </div>
     </div>
   )
 }
