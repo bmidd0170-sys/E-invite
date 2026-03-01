@@ -5,90 +5,156 @@ import { SparkleEffect } from "./sparkle-effect"
 
 export function InvitationCard() {
   return (
-    <div className="relative w-full max-w-[800px] mx-auto aspect-[4/3] overflow-hidden rounded-lg shadow-2xl shadow-primary/20">
+    <div className="relative w-full max-w-[700px] mx-auto overflow-hidden rounded-lg shadow-2xl shadow-primary/20" style={{ aspectRatio: "5/7" }}>
       {/* Dark background */}
-      <div className="absolute inset-0 bg-[#0d0d0d]" />
+      <div className="absolute inset-0 bg-[#0a0a0a]" />
 
-      {/* Glitter strip on the right */}
-      <div className="absolute right-0 top-0 bottom-0 w-[15%] overflow-hidden">
-        <Image
-          src="/images/glitter.jpg"
-          alt=""
-          fill
-          className="object-cover opacity-70"
-        />
+      {/* Sparkle/glitter border effect around edges */}
+      <div className="absolute inset-0 pointer-events-none">
         <SparkleEffect />
       </div>
 
-      {/* Red ribbon vertical */}
-      <div className="absolute right-[14%] top-0 bottom-0 w-[3px] bg-gradient-to-b from-[#C41E3A] via-[#8B0000] to-[#C41E3A]" />
+      {/* Red ribbon from top-left corner */}
+      <div className="absolute top-0 left-0 z-20 w-[45%] h-[22%]">
+        {/* Diagonal ribbon - top-left to bow */}
+        <div
+          className="absolute top-0 left-0 w-[140%] h-[6px] origin-top-left"
+          style={{
+            background: "linear-gradient(90deg, #8B0000, #C41E3A, #8B0000)",
+            transform: "rotate(35deg)",
+            boxShadow: "0 2px 8px rgba(196, 30, 58, 0.4)",
+          }}
+        />
+      </div>
 
-      {/* Red ribbon horizontal */}
-      <div className="absolute right-0 top-[38%] h-[3px] w-[20%] bg-gradient-to-r from-[#C41E3A] via-[#8B0000] to-[#C41E3A]" />
-
-      {/* Bow image */}
-      <div className="absolute right-[5%] top-[28%] w-[18%] aspect-square z-10">
+      {/* Red bow with diamond */}
+      <div className="absolute left-[6%] top-[8%] w-[22%] z-20" style={{ aspectRatio: "1" }}>
         <Image
-          src="/images/red-bow.jpg"
-          alt="Decorative red bow with diamond"
+          src="/images/red-ribbon-bow.jpg"
+          alt="Decorative red bow with diamond center"
           fill
           className="object-contain"
         />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-8 md:px-16 text-center pr-[20%]">
-        {/* Save The Dates */}
-        <h1
-          className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground tracking-wide"
-          style={{ fontStyle: "italic" }}
-        >
-          Save The Dates
-        </h1>
-
-        {/* Patricia */}
+      {/* "PATRICIA TURNS" text - top right */}
+      <div className="absolute top-[6%] right-[6%] z-10 text-right">
         <p
-          className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl mt-2 md:mt-4 tracking-wide"
-          style={{ color: "#C41E3A", fontStyle: "italic" }}
+          className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold tracking-[0.2em] uppercase leading-tight"
+          style={{ color: "#C41E3A" }}
         >
           Patricia
         </p>
-
-        {/* IS TURNING */}
         <p
-          className="text-sm sm:text-base md:text-lg mt-3 md:mt-5 tracking-[0.3em] uppercase font-semibold"
+          className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold tracking-[0.2em] uppercase leading-tight"
           style={{ color: "#C41E3A" }}
         >
-          is turning
+          Turns
         </p>
+      </div>
 
-        {/* 60 */}
-        <p
-          className="font-serif text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold mt-1 md:mt-2"
-          style={{ color: "#8B0000" }}
+      {/* Large "60" with photo in the "0" */}
+      <div className="absolute top-[18%] left-[5%] right-[5%] z-10 flex items-center justify-center" style={{ height: "40%" }}>
+        {/* The "6" */}
+        <span
+          className="font-serif leading-none select-none"
+          style={{
+            fontSize: "clamp(8rem, 28vw, 18rem)",
+            color: "#a0a0a0",
+            fontWeight: 400,
+            letterSpacing: "-0.02em",
+          }}
         >
-          60
-        </p>
+          6
+        </span>
 
-        {/* Date */}
-        <p className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl text-foreground mt-2 md:mt-4 font-semibold">
+        {/* The "0" as an oval photo frame */}
+        <div className="relative" style={{ width: "clamp(5rem, 18vw, 12rem)", height: "clamp(7rem, 25vw, 16rem)" }}>
+          {/* Silver border oval */}
+          <div
+            className="absolute inset-0 rounded-full overflow-hidden"
+            style={{
+              border: "5px solid #a0a0a0",
+              boxShadow: "0 0 20px rgba(160, 160, 160, 0.3), inset 0 0 20px rgba(0,0,0,0.3)",
+            }}
+          >
+            <Image
+              src="/images/patricia-red-dress.jpg"
+              alt="Patricia in a red dress"
+              fill
+              className="object-cover"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* "Birthday" in red script */}
+      <div className="absolute z-10 w-full text-center" style={{ top: "55%" }}>
+        <p
+          className="font-serif leading-none"
+          style={{
+            fontSize: "clamp(2.5rem, 10vw, 6rem)",
+            color: "#C41E3A",
+            fontStyle: "italic",
+            fontWeight: 700,
+          }}
+        >
+          Birthday
+        </p>
+      </div>
+
+      {/* "PARTY" */}
+      <div className="absolute z-10 w-full text-center" style={{ top: "64%" }}>
+        <p
+          className="tracking-[0.35em] uppercase font-semibold text-lg sm:text-xl md:text-2xl"
+          style={{ color: "#f5f5f5" }}
+        >
+          Party
+        </p>
+      </div>
+
+      {/* Red divider line */}
+      <div className="absolute z-10 left-1/2 -translate-x-1/2" style={{ top: "69%", width: "30%", height: "2px", background: "#C41E3A" }} />
+
+      {/* Date */}
+      <div className="absolute z-10 w-full text-center" style={{ top: "71%" }}>
+        <p
+          className="font-serif text-lg sm:text-xl md:text-2xl lg:text-3xl tracking-wider"
+          style={{ color: "#f5f5f5" }}
+        >
           June 14, 2026
         </p>
+      </div>
 
-        {/* Venue */}
+      {/* Venue details */}
+      <div className="absolute z-10 w-full text-center" style={{ top: "78%" }}>
         <p
-          className="text-sm sm:text-base md:text-lg mt-2 md:mt-3 tracking-wide font-bold"
-          style={{ color: "#ef4444" }}
+          className="text-xs sm:text-sm md:text-base tracking-[0.15em] uppercase"
+          style={{ color: "#d4d4d4" }}
         >
-          {'"Kimpton Resort & Spa" Roatan, Honduras'}
+          Kimpton Resort & Spa
         </p>
-
-        {/* Trip Dates */}
         <p
-          className="text-sm sm:text-base md:text-lg mt-1 tracking-wide font-bold"
-          style={{ color: "#ef4444" }}
+          className="text-xs sm:text-sm md:text-base tracking-[0.15em] uppercase mt-1"
+          style={{ color: "#d4d4d4" }}
+        >
+          Roatan, Honduras
+        </p>
+        <p
+          className="font-serif text-xs sm:text-sm md:text-base mt-2"
+          style={{ color: "#d4d4d4", fontStyle: "italic" }}
         >
           June 12-15, 2026
+        </p>
+      </div>
+
+      {/* RSVP line */}
+      <div className="absolute z-10 w-full text-center" style={{ top: "90%" }}>
+        <p
+          className="text-[10px] sm:text-xs md:text-sm tracking-wider"
+          style={{ color: "#a0a0a0" }}
+        >
+          {'RSVP: Katherine 123-456-7890 / www.birthday.com'}
         </p>
       </div>
     </div>

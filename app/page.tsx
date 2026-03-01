@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import { InvitationCard } from "@/components/invitation-card"
 import { EventBanner, EventDetails } from "@/components/event-details"
 import { VideoSection } from "@/components/video-section"
@@ -14,19 +13,9 @@ export default function Home() {
       <div className="w-full h-1" style={{ background: "linear-gradient(to right, #0a0a0a, #C41E3A, #8B0000, #C41E3A, #0a0a0a)" }} />
 
       <div className="px-4 md:px-6 py-10 md:py-16">
-        {/* Invitation Card with outside image */}
-        <div className="relative w-full max-w-[800px] mx-auto">
+        {/* Invitation Card */}
+        <div className="w-full max-w-[700px] mx-auto">
           <InvitationCard />
-          
-          {/* Image on right side outside card */}
-          <div className="hidden md:block absolute -right-56 top-1/2 transform -translate-y-1/2 w-48 h-64 border-4 border-[#C41E3A]" style={{ boxShadow: "0 0 40px 10px rgba(196, 30, 58, 0.2)" }}>
-            <Image
-              src="/4234121429247846438.png"
-              alt="Decorative image"
-              fill
-              className="object-cover"
-            />
-          </div>
         </div>
 
         {/* Countdown */}
