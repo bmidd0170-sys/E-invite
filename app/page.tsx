@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import { useState } from "react"
 import { InvitationCard } from "@/components/invitation-card"
 import { EventBanner, EventDetails } from "@/components/event-details"

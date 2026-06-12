@@ -85,6 +85,32 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #111111;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #C41E3A, #8B0000);
+    border-radius: 9999px;
+    border: 2px solid #111111;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #DC143C, #A01830);
+  }
+
+  html,
+  body {
+    scrollbar-width: thin;
+    scrollbar-color: #C41E3A #111111;
+  }
+
   body {
     @apply bg-background text-foreground;
   }

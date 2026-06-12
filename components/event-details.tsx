@@ -1,6 +1,7 @@
 "use client"
 
 import { Sun, Palmtree, Building2 } from "lucide-react"
+import { PhotoGallery } from "@/components/photo-gallery"
 
 export function EventBanner() {
   return (
@@ -133,6 +134,10 @@ export function EventDetails() {
             </div>
           ))}
         </div>
+      </div>
+
+      <div className="mt-10 md:mt-12">
+        <PhotoGallery />
       </div>
     </section>
   )

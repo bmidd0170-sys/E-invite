@@ -42,6 +42,7 @@ export function VideoSection() {
                 <iframe
                   src={`https://www.youtube.com/embed/${video.embedId}?rel=0`}
                   title={video.label}
+                  referrerPolicy="strict-origin-when-cross-origin"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   className="absolute inset-0 w-full h-full"
@@ -58,6 +59,7 @@ export function VideoSection() {
               <iframe
                 src={`https://www.youtube.com/embed/${videos[0].embedId}?rel=0`}
                 title={videos[0].label}
+                referrerPolicy="strict-origin-when-cross-origin"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="absolute inset-0 w-full h-full"
