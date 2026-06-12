@@ -137,7 +137,7 @@ export function PhotoGallery() {
           <ImageIcon className="mx-auto h-8 w-8 text-[#C41E3A]" />
           <p className="mt-3 text-sm">No photos have been uploaded yet.</p>
           <p className="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground/70">
-            Add the first image from the upload page.
+            Add the first image to the gallery.
           </p>
         </div>
       ) : (
