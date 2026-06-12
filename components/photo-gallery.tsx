@@ -1,18 +1,76 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { ImageIcon, Loader2, Sparkles } from "lucide-react"
-
-type GalleryImage = {
-  url: string
-  pathname: string
-  uploadedAt: string
-}
+import { GalleryImage } from "@/components/gallery-image"
+import type { GalleryPhoto } from "@/components/gallery-types"
+import { LightboxModal } from "@/components/lightbox-modal"
 
 export function PhotoGallery() {
-  const [images, setImages] = useState<GalleryImage[]>([])
+  const [images, setImages] = useState<GalleryPhoto[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const [zoomLevel, setZoomLevel] = useState(1)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const getImageAltText = useCallback((image: GalleryPhoto, index: number) => {
+    const uploadedDate = new Date(image.uploadedAt)
+
+    if (Number.isNaN(uploadedDate.getTime())) {
+      return `Celebration gallery photo ${index + 1}`
+    }
+
+    return `Celebration gallery photo ${index + 1}, uploaded on ${uploadedDate.toLocaleDateString()}`
+  }, [])
+
+  const openLightbox = useCallback((index: number) => {
+    setSelectedIndex(index)
+    setZoomLevel(1)
+    setIsModalOpen(true)
+  }, [])
+
+  const closeLightbox = useCallback(() => {
+    setIsModalOpen(false)
+    setSelectedIndex(null)
+    setZoomLevel(1)
+  }, [])
+
+  const showPreviousImage = useCallback(() => {
+    if (images.length === 0) {
+      return
+    }
+
+    setSelectedIndex((currentIndex) => {
+      if (currentIndex === null) {
+        return images.length - 1
+      }
+
+      return (currentIndex - 1 + images.length) % images.length
+    })
+
+    setZoomLevel(1)
+  }, [images.length])
+
+  const showNextImage = useCallback(() => {
+    if (images.length === 0) {
+      return
+    }
+
+    setSelectedIndex((currentIndex) => {
+      if (currentIndex === null) {
+        return 0
+      }
+
+      return (currentIndex + 1) % images.length
+    })
+
+    setZoomLevel(1)
+  }, [images.length])
+
+  const handleImageZoom = useCallback(() => {
+    setZoomLevel((currentZoom) => (currentZoom >= 2 ? 1 : currentZoom + 1))
+  }, [])
 
   useEffect(() => {
     const controller = new AbortController()
@@ -84,23 +142,29 @@ export function PhotoGallery() {
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-          {images.map((image) => (
-            <figure
+          {images.map((image, index) => (
+            <GalleryImage
               key={image.pathname}
-              className="group overflow-hidden rounded-xl border border-[#C41E3A]/70 bg-background shadow-lg shadow-black/20"
-            >
-              <div className="relative aspect-[4/5] overflow-hidden">
-                <img
-                  src={image.url}
-                  alt="Uploaded gallery photo"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-80" />
-              </div>
-            </figure>
+              image={image}
+              index={index}
+              altText={getImageAltText(image, index)}
+              onOpen={openLightbox}
+            />
           ))}
         </div>
       )}
+
+      <LightboxModal
+        images={images}
+        selectedIndex={selectedIndex}
+        zoomLevel={zoomLevel}
+        isOpen={isModalOpen}
+        onClose={closeLightbox}
+        onPrevious={showPreviousImage}
+        onNext={showNextImage}
+        onImageClick={handleImageZoom}
+        getAltText={getImageAltText}
+      />
     </section>
   )
 }

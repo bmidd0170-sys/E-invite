@@ -11,8 +11,8 @@ type UploadedImage = {
 }
 
 export default function UploadPage() {
-  const [file, setFile] = useState<File | null>(null)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [files, setFiles] = useState<File[]>([])
+  const [previewUrls, setPreviewUrls] = useState<string[]>([])
   const [isUploading, setIsUploading] = useState(false)
   const [isSavingOrder, setIsSavingOrder] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -26,11 +26,9 @@ export default function UploadPage() {
 
   useEffect(() => {
     return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl)
-      }
+      previewUrls.forEach((previewUrl) => URL.revokeObjectURL(previewUrl))
     }
-  }, [previewUrl])
+  }, [previewUrls])
 
   useEffect(() => {
     async function loadGallery() {
@@ -53,12 +51,18 @@ export default function UploadPage() {
   }, [])
 
   const selectedFileLabel = useMemo(() => {
-    if (!file) {
+    if (files.length === 0) {
       return "No file selected"
     }
 
-    return `${file.name} • ${(file.size / 1024 / 1024).toFixed(2)} MB`
-  }, [file])
+    if (files.length === 1) {
+      return `${files[0].name} • ${(files[0].size / 1024 / 1024).toFixed(2)} MB`
+    }
+
+    return `${files.length} images selected`
+  }, [files])
+
+  const selectedFileNames = useMemo(() => files.map((file) => file.name), [files])
 
   const selectedImages = useMemo(
     () => gallery.filter((image) => selectedPathnames.includes(image.pathname)),
@@ -208,24 +212,23 @@ export default function UploadPage() {
   }
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const nextFile = event.target.files?.[0] ?? null
+    const nextFiles = Array.from(event.target.files ?? [])
 
     setMessage(null)
     setError(null)
 
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl)
-    }
+    previewUrls.forEach((previewUrl) => URL.revokeObjectURL(previewUrl))
 
-    setFile(nextFile)
-    setPreviewUrl(nextFile ? URL.createObjectURL(nextFile) : null)
+    setFiles(nextFiles)
+    setPreviewUrls(nextFiles.map((file) => URL.createObjectURL(file)))
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    const form = event.currentTarget
 
-    if (!file) {
-      setError("Choose an image to upload first.")
+    if (files.length === 0) {
+      setError("Choose one or more images to upload first.")
       return
     }
 
@@ -234,30 +237,32 @@ export default function UploadPage() {
       setMessage(null)
       setError(null)
 
-      const formData = new FormData()
-      formData.append("file", file)
+      const nextGalleryItems: UploadedImage[] = []
 
-      const response = await fetch("/api/gallery", {
-        method: "POST",
-        body: formData,
-      })
+      for (const file of [...files].reverse()) {
+        const formData = new FormData()
+        formData.append("file", file)
 
-      const data = await response.json()
+        const response = await fetch("/api/gallery", {
+          method: "POST",
+          body: formData,
+        })
 
-      if (!response.ok) {
-        throw new Error(data.error || "Upload failed")
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.error || `Upload failed for ${file.name}`)
+        }
+
+        nextGalleryItems.push(data.image)
+        setGallery((currentGallery) => [data.image, ...currentGallery])
       }
 
-      setMessage("Image uploaded to Blob and added to the gallery.")
-      setGallery((currentGallery) => [data.image, ...currentGallery])
-      setFile(null)
-
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl)
-      }
-
-      setPreviewUrl(null)
-      event.currentTarget.reset()
+      setMessage(`Uploaded ${files.length} image${files.length === 1 ? "" : "s"} to Blob and added to the gallery.`)
+      setFiles([])
+      previewUrls.forEach((previewUrl) => URL.revokeObjectURL(previewUrl))
+      setPreviewUrls([])
+      form.reset()
     } catch (uploadError) {
       setError((uploadError as Error).message || "Upload failed")
     } finally {
@@ -295,21 +300,36 @@ export default function UploadPage() {
                 <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-[#C41E3A]/45 bg-background/35 px-6 py-10 text-center transition-colors hover:border-[#C41E3A] hover:bg-background/50">
                   <UploadCloud className="h-10 w-10 text-[#C41E3A]" />
                   <span className="mt-4 font-serif text-2xl text-foreground">Choose a photo</span>
-                  <span className="mt-2 text-sm text-muted-foreground">JPEG, PNG, WebP, or GIF</span>
+                  <span className="mt-2 text-sm text-muted-foreground">JPEG, PNG, WebP, or GIF. You can choose multiple images.</span>
                   <span className="mt-4 rounded-full border border-border bg-secondary px-4 py-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
                     {selectedFileLabel}
                   </span>
                   <input
                     type="file"
+                    multiple
                     accept="image/*"
                     onChange={handleFileChange}
                     className="sr-only"
                   />
                 </label>
 
-                {previewUrl && (
-                  <div className="overflow-hidden rounded-2xl border border-border bg-background">
-                    <img src={previewUrl} alt="Selected preview" className="h-72 w-full object-cover" />
+                {previewUrls.length > 0 && (
+                  <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+                    {previewUrls.map((previewUrl, index) => (
+                      <div key={previewUrl} className="overflow-hidden rounded-2xl border border-[#C41E3A]/70 bg-background">
+                        <img src={previewUrl} alt={`Selected preview ${index + 1}`} className="h-44 w-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {selectedFileNames.length > 1 && (
+                  <div className="rounded-xl border border-border bg-background/40 px-4 py-3 text-xs text-muted-foreground">
+                    {selectedFileNames.map((name) => (
+                      <div key={name} className="truncate">
+                        {name}
+                      </div>
+                    ))}
                   </div>
                 )}
 
@@ -328,11 +348,11 @@ export default function UploadPage() {
 
                 <button
                   type="submit"
-                  disabled={isUploading || !file}
+                  disabled={isUploading || files.length === 0}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-[#C41E3A] bg-[#C41E3A] px-6 py-3 font-serif text-lg font-semibold text-white transition-all duration-300 hover:bg-[#A01830] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isUploading ? <Loader2 className="h-5 w-5 animate-spin" /> : <ImagePlus className="h-5 w-5" />}
-                  {isUploading ? "Uploading..." : "Upload to Blob"}
+                  {isUploading ? "Uploading..." : files.length > 1 ? "Upload Files to Blob" : "Upload to Blob"}
                 </button>
               </form>
             </section>
