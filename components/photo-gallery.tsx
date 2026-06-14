@@ -118,7 +118,7 @@ export function PhotoGallery() {
         </div>
         <h2 className="font-serif text-2xl md:text-3xl text-foreground">Memories from the celebration</h2>
         <p className="text-muted-foreground text-sm md:text-base max-w-2xl">
-          Photos uploaded from the admin page are stored in Blob and shown here on the invite.
+          Photos uploaded from the upload page are stored in the photo gallery and shown here. Click on any photo to view it in full size, and use the navigation arrows to browse through the gallery.
         </p>
       </div>
 
