@@ -292,7 +292,7 @@ export default function UploadPage() {
                 <p className="text-xs uppercase tracking-[0.25em] text-[#C41E3A]">Gallery Upload</p>
                 <h1 className="mt-2 font-serif text-3xl md:text-5xl text-foreground">Add new celebration photos</h1>
                 <p className="mt-3 max-w-2xl text-sm md:text-base text-muted-foreground">
-                  Upload photos here and they will be stored in Blob, then displayed in the gallery on the invitation page.
+                  Upload photos here, then they will be displayed in the gallery on the invitation page.
                 </p>
               </div>
 
@@ -352,7 +352,7 @@ export default function UploadPage() {
                   className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-[#C41E3A] bg-[#C41E3A] px-6 py-3 font-serif text-lg font-semibold text-white transition-all duration-300 hover:bg-[#A01830] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isUploading ? <Loader2 className="h-5 w-5 animate-spin" /> : <ImagePlus className="h-5 w-5" />}
-                  {isUploading ? "Uploading..." : files.length > 1 ? "Upload Files to Blob" : "Upload to Blob"}
+                  {isUploading ? "Uploading..." : files.length > 1 ? "Upload Files to Gallery" : "Upload to Gallery"}
                 </button>
               </form>
             </section>
