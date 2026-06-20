@@ -300,7 +300,7 @@ export default function UploadPage() {
                 <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-[#C41E3A]/45 bg-background/35 px-6 py-10 text-center transition-colors hover:border-[#C41E3A] hover:bg-background/50">
                   <UploadCloud className="h-10 w-10 text-[#C41E3A]" />
                   <span className="mt-4 font-serif text-2xl text-foreground">Choose a photo</span>
-                  <span className="mt-2 text-sm text-muted-foreground">JPEG, PNG, WebP, or GIF. You can choose multiple images.</span>
+                  <span className="mt-2 text-sm text-muted-foreground">JPEG, PNG, WebP, or GIF. You can choose multiple images. Click here to upload pictures.</span>
                   <span className="mt-4 rounded-full border border-border bg-secondary px-4 py-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
                     {selectedFileLabel}
                   </span>
