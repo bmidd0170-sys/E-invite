@@ -1,34 +1,40 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useMemo, useState } from "react"
-import { ArrowDown, ArrowLeft, ArrowUp, Check, CheckCircle2, GripVertical, ImagePlus, Loader2, Trash2, UploadCloud, X } from "lucide-react"
+import { useEffect, useMemo, useRef, useState } from "react"
+import { ArrowDown, ArrowLeft, ArrowUp, Check, CheckCircle2, GripVertical, ImagePlus, Loader2, Play, Trash2, UploadCloud, X } from "lucide-react"
+import type { GalleryPhoto } from "@/components/gallery-types"
+import { isGalleryVideo } from "@/components/gallery-types"
 
-type UploadedImage = {
-  url: string
-  pathname: string
-  uploadedAt: string
+type PendingUpload = {
+  id: string
+  file: File
+  previewUrl: string
 }
 
 export default function UploadPage() {
-  const [files, setFiles] = useState<File[]>([])
-  const [previewUrls, setPreviewUrls] = useState<string[]>([])
+  const [pendingUploads, setPendingUploads] = useState<PendingUpload[]>([])
   const [isUploading, setIsUploading] = useState(false)
   const [isSavingOrder, setIsSavingOrder] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [gallery, setGallery] = useState<UploadedImage[]>([])
+  const [gallery, setGallery] = useState<GalleryPhoto[]>([])
   const [selectedPathnames, setSelectedPathnames] = useState<string[]>([])
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null)
+  const previewUrlsRef = useRef<string[]>([])
+
+  useEffect(() => {
+    previewUrlsRef.current = pendingUploads.map((item) => item.previewUrl)
+  }, [pendingUploads])
 
   useEffect(() => {
     return () => {
-      previewUrls.forEach((previewUrl) => URL.revokeObjectURL(previewUrl))
+      previewUrlsRef.current.forEach((previewUrl) => URL.revokeObjectURL(previewUrl))
     }
-  }, [previewUrls])
+  }, [])
 
   useEffect(() => {
     async function loadGallery() {
@@ -51,25 +57,26 @@ export default function UploadPage() {
   }, [])
 
   const selectedFileLabel = useMemo(() => {
-    if (files.length === 0) {
+    if (pendingUploads.length === 0) {
       return "No file selected"
     }
 
-    if (files.length === 1) {
-      return `${files[0].name} • ${(files[0].size / 1024 / 1024).toFixed(2)} MB`
+    if (pendingUploads.length === 1) {
+      const file = pendingUploads[0].file
+      return `${file.name} • ${(file.size / 1024 / 1024).toFixed(2)} MB`
     }
 
-    return `${files.length} images selected`
-  }, [files])
+    return `${pendingUploads.length} files selected`
+  }, [pendingUploads])
 
-  const selectedFileNames = useMemo(() => files.map((file) => file.name), [files])
+  const selectedFileNames = useMemo(() => pendingUploads.map((item) => item.file.name), [pendingUploads])
 
   const selectedImages = useMemo(
     () => gallery.filter((image) => selectedPathnames.includes(image.pathname)),
     [gallery, selectedPathnames],
   )
 
-  async function saveOrder(nextGallery: UploadedImage[], previousGallery?: UploadedImage[]) {
+  async function saveOrder(nextGallery: GalleryPhoto[], previousGallery?: GalleryPhoto[]) {
     setIsSavingOrder(true)
 
     try {
@@ -211,24 +218,50 @@ export default function UploadPage() {
     }
   }
 
+  function getFileKey(file: File) {
+    return `${file.name}-${file.size}-${file.lastModified}`
+  }
+
+  function clearPendingUploads(items: PendingUpload[]) {
+    items.forEach((item) => URL.revokeObjectURL(item.previewUrl))
+    setPendingUploads([])
+  }
+
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const nextFiles = Array.from(event.target.files ?? [])
+    const pickedFiles = Array.from(event.target.files ?? [])
+    event.target.value = ""
+
+    if (pickedFiles.length === 0) {
+      return
+    }
 
     setMessage(null)
     setError(null)
 
-    previewUrls.forEach((previewUrl) => URL.revokeObjectURL(previewUrl))
+    setPendingUploads((currentUploads) => {
+      const existingKeys = new Set(currentUploads.map((item) => item.id))
+      const newUploads = pickedFiles
+        .filter((file) => !existingKeys.has(getFileKey(file)))
+        .map((file) => ({
+          id: getFileKey(file),
+          file,
+          previewUrl: URL.createObjectURL(file),
+        }))
 
-    setFiles(nextFiles)
-    setPreviewUrls(nextFiles.map((file) => URL.createObjectURL(file)))
+      if (newUploads.length === 0) {
+        return currentUploads
+      }
+
+      return [...currentUploads, ...newUploads]
+    })
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const form = event.currentTarget
 
-    if (files.length === 0) {
-      setError("Choose one or more images to upload first.")
+    if (pendingUploads.length === 0) {
+      setError("Choose one or more photos or videos to upload first.")
       return
     }
 
@@ -237,9 +270,10 @@ export default function UploadPage() {
       setMessage(null)
       setError(null)
 
-      const nextGalleryItems: UploadedImage[] = []
+      const nextGalleryItems: GalleryPhoto[] = []
+      const uploadsToSend = [...pendingUploads]
 
-      for (const file of [...files].reverse()) {
+      for (const { file } of [...uploadsToSend].reverse()) {
         const formData = new FormData()
         formData.append("file", file)
 
@@ -258,10 +292,8 @@ export default function UploadPage() {
         setGallery((currentGallery) => [data.image, ...currentGallery])
       }
 
-      setMessage(`Uploaded ${files.length} image${files.length === 1 ? "" : "s"} to Blob and added to the gallery.`)
-      setFiles([])
-      previewUrls.forEach((previewUrl) => URL.revokeObjectURL(previewUrl))
-      setPreviewUrls([])
+      setMessage(`Uploaded ${uploadsToSend.length} file${uploadsToSend.length === 1 ? "" : "s"} to Blob and added to the gallery.`)
+      clearPendingUploads(uploadsToSend)
       form.reset()
     } catch (uploadError) {
       setError((uploadError as Error).message || "Upload failed")
@@ -290,36 +322,55 @@ export default function UploadPage() {
             <section className="overflow-hidden rounded-2xl border border-border bg-secondary/50 shadow-2xl shadow-black/30">
               <div className="border-b border-border px-6 py-5 md:px-8">
                 <p className="text-xs uppercase tracking-[0.25em] text-[#C41E3A]">Gallery Upload</p>
-                <h1 className="mt-2 font-serif text-3xl md:text-5xl text-foreground">Add new celebration photos</h1>
+                <h1 className="mt-2 font-serif text-3xl md:text-5xl text-foreground">Add new celebration media</h1>
                 <p className="mt-3 max-w-2xl text-sm md:text-base text-muted-foreground">
-                  Upload photos here, then they will be displayed in the gallery on the invitation page.
+                  Upload photos and videos here, then they will be displayed in the gallery on the invitation page.
                 </p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6 px-6 py-6 md:px-8 md:py-8">
                 <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed border-[#C41E3A]/45 bg-background/35 px-6 py-10 text-center transition-colors hover:border-[#C41E3A] hover:bg-background/50">
                   <UploadCloud className="h-10 w-10 text-[#C41E3A]" />
-                  <span className="mt-4 font-serif text-2xl text-foreground">Choose a photo</span>
-                  <span className="mt-2 text-sm text-muted-foreground">JPEG, PNG, WebP, or GIF. You can choose multiple images. Click here to upload pictures.</span>
+                  <span className="mt-4 font-serif text-2xl text-foreground">Choose photos or videos</span>
+                  <span className="mt-2 text-sm text-muted-foreground">
+                    JPEG, PNG, WebP, GIF, MP4, WebM, or MOV. You can choose multiple files.
+                  </span>
                   <span className="mt-4 rounded-full border border-border bg-secondary px-4 py-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
                     {selectedFileLabel}
                   </span>
                   <input
                     type="file"
                     multiple
-                    accept="image/*"
+                    accept="image/*,video/*"
                     onChange={handleFileChange}
                     className="sr-only"
                   />
                 </label>
 
-                {previewUrls.length > 0 && (
+                <button
+                  type="submit"
+                  disabled={isUploading || pendingUploads.length === 0}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-[#C41E3A] bg-[#C41E3A] px-6 py-3 font-serif text-lg font-semibold text-white transition-all duration-300 hover:bg-[#A01830] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isUploading ? <Loader2 className="h-5 w-5 animate-spin" /> : <ImagePlus className="h-5 w-5" />}
+                  {isUploading ? "Uploading..." : pendingUploads.length > 1 ? "Upload Files to Gallery" : "Upload to Gallery"}
+                </button>
+
+                {pendingUploads.length > 0 && (
                   <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-                    {previewUrls.map((previewUrl, index) => (
-                      <div key={previewUrl} className="overflow-hidden rounded-2xl border border-[#C41E3A]/70 bg-background">
-                        <img src={previewUrl} alt={`Selected preview ${index + 1}`} className="h-44 w-full object-cover" />
-                      </div>
-                    ))}
+                    {pendingUploads.map((item, index) => {
+                      const isVideo = item.file.type.startsWith("video/")
+
+                      return (
+                        <div key={item.id} className="overflow-hidden rounded-2xl border border-[#C41E3A]/70 bg-background">
+                          {isVideo ? (
+                            <video src={item.previewUrl} controls muted playsInline className="h-44 w-full object-cover" />
+                          ) : (
+                            <img src={item.previewUrl} alt={`Selected preview ${index + 1}`} className="h-44 w-full object-cover" />
+                          )}
+                        </div>
+                      )
+                    })}
                   </div>
                 )}
 
@@ -345,15 +396,6 @@ export default function UploadPage() {
                     {error}
                   </div>
                 )}
-
-                <button
-                  type="submit"
-                  disabled={isUploading || files.length === 0}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-[#C41E3A] bg-[#C41E3A] px-6 py-3 font-serif text-lg font-semibold text-white transition-all duration-300 hover:bg-[#A01830] disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {isUploading ? <Loader2 className="h-5 w-5 animate-spin" /> : <ImagePlus className="h-5 w-5" />}
-                  {isUploading ? "Uploading..." : files.length > 1 ? "Upload Files to Gallery" : "Upload to Gallery"}
-                </button>
               </form>
             </section>
 
@@ -362,7 +404,7 @@ export default function UploadPage() {
                 <p className="text-xs uppercase tracking-[0.25em] text-[#C41E3A]">Live Gallery</p>
                 <h2 className="mt-2 font-serif text-2xl md:text-3xl text-foreground">What is currently live</h2>
                 <p className="mt-3 text-sm md:text-base text-muted-foreground">
-                  Reorder photos here and the invite page will follow this order.
+                  Reorder photos and videos here and the invite page will follow this order.
                 </p>
               </div>
 
@@ -389,7 +431,7 @@ export default function UploadPage() {
 
               {gallery.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-border bg-background/40 px-5 py-10 text-center text-sm text-muted-foreground">
-                  No gallery images have been uploaded yet.
+                  No gallery media has been uploaded yet.
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -424,7 +466,22 @@ export default function UploadPage() {
                         </label>
 
                         <div className="w-20 shrink-0 overflow-hidden rounded-lg border border-[#C41E3A]/70 bg-black">
-                          <img src={image.url} alt="Gallery upload" className="h-20 w-full object-cover" />
+                          {isGalleryVideo(image) ? (
+                            <div className="relative h-20 w-full">
+                              <video
+                                src={image.url}
+                                muted
+                                playsInline
+                                preload="metadata"
+                                className="h-20 w-full object-cover"
+                              />
+                              <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                                <Play className="h-4 w-4 fill-white text-white" />
+                              </div>
+                            </div>
+                          ) : (
+                            <img src={image.url} alt="Gallery upload" className="h-20 w-full object-cover" />
+                          )}
                         </div>
 
                         <div className="min-w-0 flex-1">
@@ -482,9 +539,9 @@ export default function UploadPage() {
             <div className="mb-4 flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs uppercase tracking-[0.2em] text-[#C41E3A]">Confirm Deletion</p>
-                <h3 className="mt-2 font-serif text-2xl text-foreground">Delete selected images?</h3>
+                <h3 className="mt-2 font-serif text-2xl text-foreground">Delete selected items?</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  The following images are selected and will be removed from the gallery:
+                  The following items are selected and will be removed from the gallery:
                 </p>
               </div>
               <button
@@ -505,9 +562,20 @@ export default function UploadPage() {
                 return (
                   <div key={image.pathname} className="flex items-center gap-3 rounded-lg border border-[#C41E3A]/40 bg-background/35 p-2.5">
                     <div className="h-14 w-14 overflow-hidden rounded-md border border-[#C41E3A]/60">
-                      <img src={image.url} alt="Selected for deletion" className="h-full w-full object-cover" />
+                      {isGalleryVideo(image) ? (
+                        <div className="relative h-full w-full bg-black">
+                          <video src={image.url} muted playsInline preload="metadata" className="h-full w-full object-cover" />
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                            <Play className="h-3.5 w-3.5 fill-white text-white" />
+                          </div>
+                        </div>
+                      ) : (
+                        <img src={image.url} alt="Selected for deletion" className="h-full w-full object-cover" />
+                      )}
                     </div>
-                    <p className="text-sm text-foreground">Image at position {position + 1}</p>
+                    <p className="text-sm text-foreground">
+                      {isGalleryVideo(image) ? "Video" : "Photo"} at position {position + 1}
+                    </p>
                   </div>
                 )
               })}
@@ -529,7 +597,7 @@ export default function UploadPage() {
                 className="inline-flex items-center gap-2 rounded-md border border-[#C41E3A] bg-[#C41E3A] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#A01830] disabled:opacity-50"
               >
                 {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-                {isDeleting ? "Deleting..." : `Delete ${selectedImages.length} image${selectedImages.length === 1 ? "" : "s"}`}
+                {isDeleting ? "Deleting..." : `Delete ${selectedImages.length} item${selectedImages.length === 1 ? "" : "s"}`}
               </button>
             </div>
           </div>

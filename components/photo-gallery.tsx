@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react"
 import { ImageIcon, Loader2, Sparkles } from "lucide-react"
 import { GalleryImage } from "@/components/gallery-image"
 import type { GalleryPhoto } from "@/components/gallery-types"
+import { isGalleryVideo } from "@/components/gallery-types"
 import { LightboxModal } from "@/components/lightbox-modal"
 
 export function PhotoGallery() {
@@ -16,12 +17,13 @@ export function PhotoGallery() {
 
   const getImageAltText = useCallback((image: GalleryPhoto, index: number) => {
     const uploadedDate = new Date(image.uploadedAt)
+    const mediaLabel = isGalleryVideo(image) ? "video" : "photo"
 
     if (Number.isNaN(uploadedDate.getTime())) {
-      return `Celebration gallery photo ${index + 1}`
+      return `Celebration gallery ${mediaLabel} ${index + 1}`
     }
 
-    return `Celebration gallery photo ${index + 1}, uploaded on ${uploadedDate.toLocaleDateString()}`
+    return `Celebration gallery ${mediaLabel} ${index + 1}, uploaded on ${uploadedDate.toLocaleDateString()}`
   }, [])
 
   const openLightbox = useCallback((index: number) => {
@@ -118,7 +120,8 @@ export function PhotoGallery() {
         </div>
         <h2 className="font-serif text-2xl md:text-3xl text-foreground">Memories from the celebration</h2>
         <p className="text-muted-foreground text-sm md:text-base max-w-2xl">
-          Photos uploaded from the upload page are stored in the photo gallery and shown here. Click on any photo to view it in full size, and use the navigation arrows to browse through the gallery.
+          Photos and videos uploaded from the upload page are stored in the gallery and shown here. Click any item to
+          view it full size, and use the navigation arrows to browse.
         </p>
       </div>
 
@@ -135,9 +138,9 @@ export function PhotoGallery() {
       ) : images.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border bg-background/40 px-6 py-10 text-center text-muted-foreground">
           <ImageIcon className="mx-auto h-8 w-8 text-[#C41E3A]" />
-          <p className="mt-3 text-sm">No photos have been uploaded yet.</p>
+          <p className="mt-3 text-sm">No photos or videos have been uploaded yet.</p>
           <p className="mt-1 text-xs uppercase tracking-[0.2em] text-muted-foreground/70">
-            Add the first image to the gallery.
+            Add the first image or video to the gallery.
           </p>
         </div>
       ) : (

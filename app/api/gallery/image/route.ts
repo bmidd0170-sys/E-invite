@@ -1,5 +1,6 @@
 import { get } from "@vercel/blob"
 import { NextRequest, NextResponse } from "next/server"
+import { resolveGalleryContentType } from "@/lib/gallery-media"
 
 const GALLERY_PREFIX = "gallery/"
 const GALLERY_ORDER_PATHNAME = `${GALLERY_PREFIX}order.json`
@@ -35,18 +36,25 @@ export async function GET(request: NextRequest) {
     })
 
     if (!blob || blob.statusCode !== 200 || !blob.stream) {
-      return NextResponse.json({ error: "Image not found" }, { status: 404 })
+      return NextResponse.json({ error: "Media not found" }, { status: 404 })
     }
 
-    return new NextResponse(blob.stream, {
-      headers: {
-        "Content-Type": blob.blob.contentType,
-        "Cache-Control": blob.blob.cacheControl,
-        ETag: blob.blob.etag,
-      },
-    })
+    const contentType = resolveGalleryContentType(pathname, blob.blob.contentType)
+    const isVideo = contentType.startsWith("video/")
+
+    const headers: Record<string, string> = {
+      "Content-Type": contentType,
+      "Cache-Control": blob.blob.cacheControl,
+      ETag: blob.blob.etag,
+    }
+
+    if (isVideo) {
+      headers["Accept-Ranges"] = "bytes"
+    }
+
+    return new NextResponse(blob.stream, { headers })
   } catch (error) {
-    console.error("Error loading private gallery image:", error)
-    return NextResponse.json({ error: "Failed to load gallery image" }, { status: 500 })
+    console.error("Error loading private gallery media:", error)
+    return NextResponse.json({ error: "Failed to load gallery media" }, { status: 500 })
   }
 }

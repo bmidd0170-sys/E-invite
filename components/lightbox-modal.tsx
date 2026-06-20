@@ -5,6 +5,7 @@ import Image from "next/image"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
 import type { GalleryPhoto } from "@/components/gallery-types"
+import { isGalleryVideo } from "@/components/gallery-types"
 import { NavigationControls } from "@/components/navigation-controls"
 
 type LightboxModalProps = {
@@ -31,6 +32,7 @@ export function LightboxModal({
   getAltText,
 }: LightboxModalProps) {
   const currentImage = selectedIndex === null ? null : images[selectedIndex]
+  const isVideo = currentImage ? isGalleryVideo(currentImage) : false
   const [imageAspectRatio, setImageAspectRatio] = useState(4 / 5)
   const [transformOrigin, setTransformOrigin] = useState("50% 50%")
 
@@ -39,12 +41,16 @@ export function LightboxModal({
       return
     }
 
-    // Reset while the next image loads so the container never stretches unexpectedly.
+    // Reset while the next item loads so the container never stretches unexpectedly.
     setImageAspectRatio(4 / 5)
     setTransformOrigin("50% 50%")
-  }, [isOpen, selectedIndex])
+  }, [isOpen, selectedIndex, isVideo])
 
   const handleImageClick = (event: MouseEvent<HTMLButtonElement>) => {
+    if (isVideo) {
+      return
+    }
+
     if (zoomLevel === 1) {
       const rect = event.currentTarget.getBoundingClientRect()
       const x = ((event.clientX - rect.left) / rect.width) * 100
@@ -117,10 +123,10 @@ export function LightboxModal({
             }
           }}
         >
-          <DialogPrimitive.Title className="sr-only">Photo lightbox</DialogPrimitive.Title>
+          <DialogPrimitive.Title className="sr-only">{isVideo ? "Video lightbox" : "Photo lightbox"}</DialogPrimitive.Title>
           <DialogPrimitive.Description className="sr-only">
-            Fullscreen photo view with keyboard navigation. Press left or right arrows to change images and press Escape
-            to close.
+            Fullscreen {isVideo ? "video" : "photo"} view with keyboard navigation. Press left or right arrows to change
+            items and press Escape to close.
           </DialogPrimitive.Description>
 
           <DialogPrimitive.Close
@@ -132,36 +138,54 @@ export function LightboxModal({
 
           <NavigationControls onPrevious={onPrevious} onNext={onNext} />
 
-          <div className="relative flex max-h-[80vh] w-full items-center justify-center">
+          <div className="relative flex max-h-[80vh] w-full flex-col items-center justify-center">
             <div
               className="relative overflow-hidden rounded-xl border border-border bg-black/40"
               style={frameStyle}
             >
-              <button
-                type="button"
-                onClick={handleImageClick}
-                aria-label={zoomLevel === 1 ? "Zoom in image" : "Reset image zoom"}
-                className="relative h-full w-full"
-                style={{ cursor: zoomLevel === 1 ? "zoom-in" : "zoom-out" }}
-              >
-                <Image
+              {isVideo ? (
+                <video
+                  key={currentImage.url}
                   src={currentImage.url}
-                  alt={getAltText(currentImage, selectedIndex)}
-                  fill
-                  priority
-                  draggable={false}
-                  sizes="(max-width: 768px) 92vw, 1200px"
-                  className="select-none object-contain transition-transform duration-300 ease-in-out"
-                  style={{ transform: `scale(${zoomLevel})`, transformOrigin, transition: "transform 0.3s ease" }}
-                  onLoad={(event) => {
-                    const loadedImage = event.currentTarget
+                  controls
+                  autoPlay
+                  playsInline
+                  className="h-full w-full object-contain"
+                  onLoadedMetadata={(event) => {
+                    const loadedVideo = event.currentTarget
 
-                    if (loadedImage.naturalWidth > 0 && loadedImage.naturalHeight > 0) {
-                      setImageAspectRatio(loadedImage.naturalWidth / loadedImage.naturalHeight)
+                    if (loadedVideo.videoWidth > 0 && loadedVideo.videoHeight > 0) {
+                      setImageAspectRatio(loadedVideo.videoWidth / loadedVideo.videoHeight)
                     }
                   }}
                 />
-              </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleImageClick}
+                  aria-label={zoomLevel === 1 ? "Zoom in image" : "Reset image zoom"}
+                  className="relative h-full w-full"
+                  style={{ cursor: zoomLevel === 1 ? "zoom-in" : "zoom-out" }}
+                >
+                  <Image
+                    src={currentImage.url}
+                    alt={getAltText(currentImage, selectedIndex)}
+                    fill
+                    priority
+                    draggable={false}
+                    sizes="(max-width: 768px) 92vw, 1200px"
+                    className="select-none object-contain transition-transform duration-300 ease-in-out"
+                    style={{ transform: `scale(${zoomLevel})`, transformOrigin, transition: "transform 0.3s ease" }}
+                    onLoad={(event) => {
+                      const loadedImage = event.currentTarget
+
+                      if (loadedImage.naturalWidth > 0 && loadedImage.naturalHeight > 0) {
+                        setImageAspectRatio(loadedImage.naturalWidth / loadedImage.naturalHeight)
+                      }
+                    }}
+                  />
+                </button>
+              )}
             </div>
             <p className="mt-3 text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">
               {selectedIndex + 1} / {images.length}

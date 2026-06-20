@@ -1,5 +1,6 @@
 import { del, get, list, put } from "@vercel/blob"
 import { NextRequest, NextResponse } from "next/server"
+import { resolveGalleryContentType } from "@/lib/gallery-media"
 
 const GALLERY_PREFIX = "gallery/"
 const GALLERY_ORDER_PATHNAME = `${GALLERY_PREFIX}order.json`
@@ -38,8 +39,21 @@ async function readGalleryOrder(blobs: Awaited<ReturnType<typeof list>>["blobs"]
   }
 }
 
-function toImageProxyUrl(pathname: string) {
+function toMediaProxyUrl(pathname: string) {
   return `/api/gallery/image?pathname=${encodeURIComponent(pathname)}`
+}
+
+function toGalleryItem(blob: { pathname: string; uploadedAt: Date | string; contentType?: string | null }) {
+  return {
+    url: toMediaProxyUrl(blob.pathname),
+    pathname: blob.pathname,
+    uploadedAt: blob.uploadedAt,
+    contentType: resolveGalleryContentType(blob.pathname, blob.contentType),
+  }
+}
+
+function isAllowedGalleryMedia(file: File) {
+  return file.type.startsWith("image/") || file.type.startsWith("video/")
 }
 
 function sortGalleryImages(blobs: Awaited<ReturnType<typeof list>>["blobs"], order: string[]) {
@@ -95,11 +109,7 @@ export async function GET() {
     const images = sortGalleryImages(blobs, order)
 
     return NextResponse.json({
-      images: images.map((blob) => ({
-        url: toImageProxyUrl(blob.pathname),
-        pathname: blob.pathname,
-        uploadedAt: blob.uploadedAt,
-      })),
+      images: images.map((blob) => toGalleryItem(blob)),
     })
   } catch (error) {
     console.error("Error loading gallery images:", error)
@@ -118,16 +128,20 @@ export async function POST(request: NextRequest) {
     const file = formData.get("file")
 
     if (!(file instanceof File)) {
-      return NextResponse.json({ error: "Image file is required" }, { status: 400 })
+      return NextResponse.json({ error: "Media file is required" }, { status: 400 })
     }
 
-    if (!file.type.startsWith("image/")) {
-      return NextResponse.json({ error: "Only image files are allowed" }, { status: 400 })
+    if (!isAllowedGalleryMedia(file)) {
+      return NextResponse.json({ error: "Only image and video files are allowed" }, { status: 400 })
     }
 
     const originalName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-")
     const pathname = `${GALLERY_PREFIX}${Date.now()}-${originalName || "upload"}`
-    const blob = await put(pathname, file, { access: "private" })
+    const contentType = resolveGalleryContentType(pathname, file.type)
+    const blob = await put(pathname, file, {
+      access: "private",
+      contentType,
+    })
     const { blobs } = await list({ prefix: GALLERY_PREFIX })
     const existingOrder = await readGalleryOrder(blobs)
     const nextOrder = [pathname, ...existingOrder.filter((item) => item !== pathname)]
@@ -135,16 +149,16 @@ export async function POST(request: NextRequest) {
     await saveGalleryOrder(nextOrder)
 
     return NextResponse.json({
-      message: "Image uploaded successfully",
-      image: {
-        url: toImageProxyUrl(blob.pathname),
+      message: "Media uploaded successfully",
+      image: toGalleryItem({
         pathname: blob.pathname,
         uploadedAt: blob.uploadedAt ?? new Date(),
-      },
+        contentType,
+      }),
     })
   } catch (error) {
-    console.error("Error uploading gallery image:", error)
-    return NextResponse.json({ error: "Failed to upload image" }, { status: 500 })
+    console.error("Error uploading gallery media:", error)
+    return NextResponse.json({ error: "Failed to upload media" }, { status: 500 })
   }
 }
 
