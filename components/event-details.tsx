@@ -1,7 +1,7 @@
 "use client"
 
-import { Sun, Palmtree, Building2 } from "lucide-react"
-import { PhotoGallery } from "@/components/photo-gallery"
+import Link from "next/link"
+import { Sun, Palmtree, Building2, Images } from "lucide-react"
 
 export function EventBanner() {
   return (
@@ -136,8 +136,18 @@ export function EventDetails() {
         </div>
       </div>
 
-      <div className="mt-10 md:mt-12">
-        <PhotoGallery />
+      <div className="mt-10 md:mt-12 bg-secondary/50 border border-border rounded-lg p-6 md:p-8 text-center">
+        <Images className="mx-auto h-8 w-8 text-[#C41E3A]" />
+        <h3 className="mt-4 font-serif text-xl md:text-2xl text-foreground">Photo Gallery</h3>
+        <p className="mt-2 text-muted-foreground text-sm md:text-base max-w-md mx-auto">
+          Browse photos and videos from the celebration.
+        </p>
+        <Link
+          href="/gallery"
+          className="mt-6 inline-flex items-center gap-2 bg-[#C41E3A] border border-[#C41E3A] hover:bg-[#A01830] font-serif font-semibold px-6 py-2.5 rounded-md text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#C41E3A]/30"
+        >
+          View Gallery
+        </Link>
       </div>
     </section>
   )

@@ -120,8 +120,8 @@ export function PhotoGallery() {
         </div>
         <h2 className="font-serif text-2xl md:text-3xl text-foreground">Memories from the celebration</h2>
         <p className="text-muted-foreground text-sm md:text-base max-w-2xl">
-          Photos and videos uploaded from the upload page are stored in the gallery and shown here. Click any item to
-          view it full size, and use the navigation arrows to browse.
+          Photos and videos from the celebration. Click any item to view it full size, and use the navigation arrows to
+          browse.
         </p>
       </div>
 
